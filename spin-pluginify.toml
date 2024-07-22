@@ -1,0 +1,13 @@
+name = "otel"
+version = "0.2.0"
+spin_compatibility = ">=2.5"
+license = "MIT"
+package = "otel"
+assets = [
+    "spin-otel-config/compose.yaml", 
+    "spin-otel-config/grafana.yaml", 
+    "spin-otel-config/loki.yaml", 
+    "spin-otel-config/otel-collector-config.yaml", 
+    "spin-otel-config/prometheus.yaml", 
+    "spin-otel-config/tempo.yaml"
+]
