@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"fmt"
 	"os"
 	"os/exec"
 
@@ -20,6 +21,10 @@ var upCmd = &cobra.Command{
 
 func up() error {
 	pathToSpin := os.Getenv("SPIN_BIN_PATH")
+	if pathToSpin == "" {
+		return fmt.Errorf("please ensure that you are running 'spin otel up', rather than calling the OTel plugin binary directly")
+	}
+
 	cmd := exec.Command(pathToSpin, "up")
 	cmd.Env = append(
 		os.Environ(),
