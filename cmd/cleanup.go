@@ -8,11 +8,11 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var downCmd = &cobra.Command{
-	Use:   "down",
-	Short: "Stops the OTel Docker containers and deletes related Docker networks.",
+var cleanUpCmd = &cobra.Command{
+	Use:   "cleanup",
+	Short: "Clean up OTel dependencies",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		if err := down(); err != nil {
+		if err := cleanUp(); err != nil {
 			return err
 		}
 		return nil
@@ -36,7 +36,7 @@ func getIDs(dockerOutput []byte) []string {
 	return result
 }
 
-func down() error {
+func cleanUp() error {
 	fmt.Println("Deleting Spin OTel Docker containers...")
 
 	getContainerIDs := exec.Command("docker", "ps")
@@ -81,8 +81,4 @@ func down() error {
 
 	fmt.Println("All Spin OTel resources have been removed.")
 	return nil
-}
-
-func init() {
-	rootCmd.AddCommand(downCmd)
 }

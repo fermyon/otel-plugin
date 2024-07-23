@@ -15,7 +15,6 @@ func main() {
 	}
 
 	cmd.Execute()
-
 }
 
 func checkDependencies() error {
