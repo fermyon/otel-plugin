@@ -23,8 +23,7 @@ services:
     restart: always
     ports:
       - "16686:16686" # UI
-      - "14268" # ??
-      - "14250" # ??
+      - "14268" # can accept spans directly from clients in jaeger.thrift format over binary thrift protocol
 
   tempo:
     image: grafana/tempo:2.4.1

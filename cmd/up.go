@@ -28,23 +28,11 @@ func up() error {
 	cmd := exec.Command(pathToSpin, "up")
 	cmd.Env = append(
 		os.Environ(),
-		[]string{
-			"OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4318",
-			"OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://localhost:4318/v1/traces",
-			"OTEL_EXPORTER_OTLP_METRICS_ENDPOINT=http://localhost:4318/v1/metrics",
-		}...,
+		"OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4318",
 	)
 
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 
-	if err := cmd.Run(); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func init() {
-	rootCmd.AddCommand(upCmd)
+	return cmd.Run()
 }

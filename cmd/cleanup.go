@@ -37,10 +37,10 @@ func getIDs(dockerOutput []byte) []string {
 }
 
 func cleanUp() error {
-	fmt.Println("Deleting Spin OTel Docker containers...")
+	fmt.Println("Stopping Spin OTel Docker containers...")
 
-	getContainerIDs := exec.Command("docker", "ps")
-	dockerPsOutput, err := getContainerIDs.CombinedOutput()
+	getContainers := exec.Command("docker", "ps")
+	dockerPsOutput, err := getContainers.CombinedOutput()
 	if err != nil {
 		fmt.Println(string(dockerPsOutput))
 		return err
@@ -58,27 +58,6 @@ func cleanUp() error {
 		}
 	}
 
-	fmt.Println("Deleting Spin OTel Docker network...")
-
-	getNetworkIDs := exec.Command("docker", "network", "list")
-	networkIDOutput, err := getNetworkIDs.CombinedOutput()
-	if err != nil {
-		fmt.Println(string(networkIDOutput))
-		return err
-	}
-
-	networkIDs := getIDs(networkIDOutput)
-
-	// The `docker network rm` command will throw an error if there are no networks to delete
-	if len(networkIDs) != 0 {
-		rmNetworks := exec.Command("docker", append([]string{"network", "rm"}, networkIDs...)...)
-		rmNetworksOutput, err := rmNetworks.CombinedOutput()
-		if err != nil {
-			fmt.Println(string(rmNetworksOutput))
-			return err
-		}
-	}
-
-	fmt.Println("All Spin OTel resources have been removed.")
+	fmt.Println("All Spin OTel resources have been cleaned up.")
 	return nil
 }
