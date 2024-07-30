@@ -20,7 +20,7 @@ spin plugin install otel
 The canary release of the command trigger plugin represents the most recent commits on `main` and may not be stable, with some features still in progress.
 
 ```sh
-spin plugins install --url https://github.com/fermyon/otel-plugin/releases/download/canary/otel-plugin.json
+spin plugins install --url https://github.com/fermyon/otel-plugin/releases/download/canary/otel.json
 ```
 
 ## Install from a local build

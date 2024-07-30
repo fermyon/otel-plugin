@@ -9,10 +9,8 @@ on:
   workflow_dispatch:
 
 env:
-  PROGRAM_NAME: otel-plugin
+  PROGRAM_NAME: otel
   SPIN_VERSION: v2.6.0
-  BRANCH: main 
-
 jobs: 
   build:
     name: Build plugin binaries
@@ -78,9 +76,6 @@ jobs:
         if: github.ref == 'refs/heads/main'
         run: echo "RELEASE_VERSION=canary" >> $GITHUB_ENV
 
-      - name: ECHO RELEASE VERSION
-        run: echo ${{ env.RELEASE_VERSION }}
-
       - name: Download artifacts
         uses: actions/download-artifact@v4
       - name: Display structure of downloaded files
@@ -112,7 +107,7 @@ jobs:
       # Handle canary release
       - name: Delete canary release
         if: github.ref == 'refs/heads/main'
-        run: gh release delete ${{ env.RELEASE_VERSION }} --repo ${{ github.repository }} || echo "Release not found, continuing..."
+        run: gh release delete ${{ env.RELEASE_VERSION }} --repo ${{ github.repository }} --cleanup-tag || echo "Release not found, continuing..."
         env:
           GH_TOKEN: ${{ github.token }}
       - name: Recreate canary release

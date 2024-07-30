@@ -1,8 +1,8 @@
-name = "otel-plugin"
+name = "otel"
 version = "0.1.0"
 spin_compatibility = ">=2.5"
 license = "MIT"
-package = "otel-plugin"
+package = "otel"
 assets = [
     "otel-config/compose.yaml", 
     "otel-config/grafana.yaml", 
