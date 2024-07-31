@@ -1,8 +1,12 @@
-# Spin `otel` command
+# Spin OTel Plugin
 
-This is a plugin that makes it easy to use OTel with Spin.
+This is a plugin that makes it easy to use OTel with Spin. 
 
-## Installation
+## Background
+
+Spin applications have the ability to export metrics and trace data. This plugin provides dashboards for viewing the data.
+
+# Installation
 
 The trigger is installed as a Spin plugin. It can be installed from a release or build.
 
@@ -31,4 +35,52 @@ Alternatively, use the `spin pluginify` plugin to install from a fresh build. Th
 spin plugins install pluginify
 cargo build --release
 spin pluginify install
+```
+
+# Usage
+
+Once the plugin is installed, you can try the below commands:
+
+## Set up the dashboards
+
+```sh
+spin otel setup
+```
+
+## Run a Spin app that exports telemetry data
+
+```sh
+spin otel up
+```
+
+Any flags that work with the `spin up` command, will work with the `spin otel up` command.
+
+```sh
+spin otel up -- --help
+```
+
+## Open the dashboards in the default browser
+
+Dashboard for viewing metrics and logs:
+
+```sh
+spin otel open grafana
+```
+
+Dashboard for viewing trace data: 
+
+```sh
+spin otel open jaeger
+```
+
+Dashboard for querying and viewing metrics:
+
+```sh
+spin otel open prometheus
+```
+
+## Terminate the dashboards
+
+```sh
+spin otel cleanup
 ```
