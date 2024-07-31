@@ -1,7 +1,7 @@
 name = "otel"
 version = "0.1.0"
 spin_compatibility = ">=2.5"
-license = "MIT"
+license = "Apache-2.0"
 package = "otel"
 assets = [
     "otel-config/compose.yaml", 
