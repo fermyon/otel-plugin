@@ -22,7 +22,6 @@ jobs:
           - { goArch: "amd64", goOs: "linux", pluginifyArch: "amd64", pluginifyOs: linux}
           - { goArch: "arm64", goOs: "linux", pluginifyArch: "aarch64", pluginifyOs: linux}
           - { goArch: "amd64", goOs: "windows", pluginifyArch: "amd64", pluginifyOs: windows}
-          - { goArch: "arm64", goOs: "windows", pluginifyArch: "aarch64", pluginifyOs: windows}
           - { goArch: "arm64", goOs: "darwin", pluginifyArch: "amd64", pluginifyOs: macos}
           - { goArch: "amd64", goOs: "darwin", pluginifyArch: "aarch64", pluginifyOs: macos}
     steps:
