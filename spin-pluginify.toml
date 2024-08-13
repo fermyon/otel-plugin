@@ -4,10 +4,10 @@ spin_compatibility = ">=2.5"
 license = "Apache-2.0"
 package = "otel"
 assets = [
-    "otel-config/compose.yaml", 
-    "otel-config/grafana.yaml", 
-    "otel-config/loki.yaml", 
-    "otel-config/otel-collector-config.yaml", 
-    "otel-config/prometheus.yaml", 
+    "otel-config/compose.yaml",
+    "otel-config/grafana.yaml",
+    "otel-config/loki.yaml",
+    "otel-config/otel-collector-config.yaml",
+    "otel-config/prometheus.yaml",
     "otel-config/tempo.yaml"
 ]
