@@ -1,6 +1,6 @@
 # Spin OTel Plugin
 
-This is a plugin that makes it easy to use OTel with Spin. 
+This is a plugin that makes it easy to use OTel with Spin.
 
 ## Background
 
@@ -33,7 +33,7 @@ Alternatively, use the `spin pluginify` plugin to install from a fresh build. Th
 
 ```sh
 spin plugins install pluginify
-cargo build --release
+go build -o otel
 spin pluginify install
 ```
 
@@ -67,7 +67,7 @@ Dashboard for viewing metrics and logs:
 spin otel open grafana
 ```
 
-Dashboard for viewing trace data: 
+Dashboard for viewing trace data:
 
 ```sh
 spin otel open jaeger

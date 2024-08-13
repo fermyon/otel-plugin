@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	openSubCmds "github.com/fermyon/otel-plugin/cmd/open-subcmd"
+	open "github.com/fermyon/otel-plugin/cmd/open"
 	"github.com/spf13/cobra"
 )
 
@@ -28,7 +28,7 @@ func init() {
 	rootCmd.AddCommand(cleanUpCmd)
 	rootCmd.AddCommand(setUpCmd)
 	rootCmd.AddCommand(openCmd)
-	openCmd.AddCommand(openSubCmds.GrafanaCmd)
-	openCmd.AddCommand(openSubCmds.JaegerCmd)
-	openCmd.AddCommand(openSubCmds.PrometheusCmd)
+	openCmd.AddCommand(open.GrafanaCmd)
+	openCmd.AddCommand(open.JaegerCmd)
+	openCmd.AddCommand(open.PrometheusCmd)
 }
