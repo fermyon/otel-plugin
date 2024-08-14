@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"os"
 	"os/exec"
 	"path"
 
@@ -20,7 +21,12 @@ var setUpCmd = &cobra.Command{
 }
 
 func setUp() error {
-	cmd := exec.Command("docker", "compose", "-f", path.Join(otelConfigPath, "compose.yaml"), "up", "-d")
+	composeFile := path.Join(otelConfigPath, "compose.yaml")
+	if _, err := os.Stat(composeFile); os.IsNotExist(err) {
+		return fmt.Errorf("the otel-config directory is missing the \"compose.yaml\" file, so please consider removing and re-installing the otel plugin")
+	}
+
+	cmd := exec.Command("docker", "compose", "-f", composeFile, "up", "-d")
 
 	fmt.Println("Pulling and running Spin OTel resources...")
 

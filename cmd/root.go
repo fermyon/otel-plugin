@@ -27,6 +27,10 @@ func setOtelConfigPath() error {
 
 	otelConfigPath = path.Join(path.Dir(executablePath), otelConfigDirName)
 
+	if _, err := os.Stat(otelConfigPath); os.IsNotExist(err) {
+		return fmt.Errorf("the directory in which the plugin binary is executed is missing necessary files, so please make sure the plugin was installed using \"spin plugins install otel\"")
+	}
+
 	return nil
 }
 
