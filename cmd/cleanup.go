@@ -25,7 +25,7 @@ func getIDs(dockerOutput []byte) []string {
 
 	for _, entry := range outputArray {
 		// Each container in the Docker Compose stack will have the name of the directory
-		if strings.Contains(entry, otelConfigDir) {
+		if strings.Contains(entry, otelConfigDirName) {
 			fields := strings.Fields(entry)
 			if len(fields) > 0 {
 				result = append(result, fields[0])

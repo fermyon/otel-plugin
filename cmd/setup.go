@@ -20,7 +20,7 @@ var setUpCmd = &cobra.Command{
 }
 
 func setUp() error {
-	cmd := exec.Command("docker", "compose", "-f", path.Join(otelConfigDir, "compose.yaml"), "up", "-d")
+	cmd := exec.Command("docker", "compose", "-f", path.Join(otelConfigPath, "compose.yaml"), "up", "-d")
 
 	fmt.Println("Pulling and running Spin OTel resources...")
 
