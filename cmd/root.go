@@ -35,6 +35,7 @@ func Execute() {
 		fmt.Fprintln(os.Stderr, fmt.Errorf("error finding the otel-config directory: %w", err))
 		os.Exit(1)
 	}
+
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
