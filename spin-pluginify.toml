@@ -1,5 +1,5 @@
 name = "otel"
-version = "0.1.1"
+version = "0.1.2"
 spin_compatibility = ">=2.5"
 license = "Apache-2.0"
 package = "otel"
