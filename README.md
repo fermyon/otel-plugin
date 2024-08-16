@@ -6,6 +6,12 @@ This is a plugin that makes it easy to use OTel with Spin.
 
 Spin applications have the ability to export metrics and trace data. This plugin provides dashboards for viewing the data.
 
+## Requirements
+
+This plugin relies on third-party software to work properly. Please be sure you have the following installed before continuing:
+
+- Latest version of [Docker](https://www.docker.com/products/docker-desktop)
+
 # Installation
 
 The trigger is installed as a Spin plugin. It can be installed from a release or build.
@@ -34,7 +40,7 @@ Alternatively, use the `spin pluginify` plugin to install from a fresh build. Th
 ```sh
 spin plugins install pluginify
 go build -o otel
-spin pluginify install
+spin pluginify --install
 ```
 
 # Usage

@@ -37,6 +37,10 @@ func getIDs(dockerOutput []byte) []string {
 }
 
 func cleanUp() error {
+	if err := checkDocker(); err != nil {
+		return err
+	}
+
 	fmt.Println("Stopping Spin OTel Docker containers...")
 
 	getContainers := exec.Command("docker", "ps")

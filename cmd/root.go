@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"os/exec"
 	"path"
 
 	open "github.com/fermyon/otel-plugin/cmd/open"
@@ -28,7 +29,22 @@ func setOtelConfigPath() error {
 	otelConfigPath = path.Join(path.Dir(executablePath), otelConfigDirName)
 
 	if _, err := os.Stat(otelConfigPath); os.IsNotExist(err) {
-		return fmt.Errorf("the directory in which the plugin binary is executed is missing necessary files, so please make sure the plugin was installed using \"spin plugins install otel\"")
+		return fmt.Errorf("The directory in which the plugin binary is executed is missing necessary files, so please make sure the plugin was installed using \"spin plugins install otel\"")
+	}
+
+	return nil
+}
+
+// checkDocker checks whether Docker is installed and the Docker daemon is running
+func checkDocker() error {
+	cmd := exec.Command("docker", "--version")
+	if err := cmd.Run(); err != nil {
+		return fmt.Errorf("Docker appears not to be installed, so please visit their install page and try again once installed: https://www.docker.com/products/docker-desktop")
+	}
+
+	cmd = exec.Command("docker", "info")
+	if err := cmd.Run(); err != nil {
+		return fmt.Errorf("The Docker daemon appears not to be running. The command to start Docker depends on your operating system. For instructions, check the correct page under https://docs.docker.com/engine/install")
 	}
 
 	return nil
@@ -36,12 +52,11 @@ func setOtelConfigPath() error {
 
 func Execute() {
 	if err := setOtelConfigPath(); err != nil {
-		fmt.Fprintln(os.Stderr, fmt.Errorf("error finding the otel-config directory: %w", err))
+		fmt.Fprintln(os.Stderr, fmt.Errorf("Error finding the \"otel-config\" directory: %w", err))
 		os.Exit(1)
 	}
 
 	if err := rootCmd.Execute(); err != nil {
-		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
 }
