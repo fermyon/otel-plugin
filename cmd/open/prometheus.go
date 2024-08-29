@@ -7,7 +7,7 @@ import (
 
 var PrometheusCmd = &cobra.Command{
 	Use:   "prometheus",
-	Short: "Opens the prometheus UI in the default browser.",
+	Short: "Opens the Prometheus UI in the default browser.",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		return prometheus()
 	},

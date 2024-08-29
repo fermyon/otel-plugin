@@ -12,8 +12,8 @@ import (
 
 var rootCmd = &cobra.Command{
 	Use:   "otel",
-	Short: "A plugin that makes using Spin with OTel easy.",
-	Long:  "A plugin that makes using Spin with OTel easy by automatically standing up dependencies, sourcing environment variables, and linking to dashboards.",
+	Short: "A plugin that makes using Spin with OpenTelemetry easy.",
+	Long:  "A plugin that makes using Spin with OpenTelemetry easy by automatically standing up dependencies, sourcing environment variables, and linking to dashboards.",
 }
 
 var otelConfigDirName = "otel-config"

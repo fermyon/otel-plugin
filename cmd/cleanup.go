@@ -12,7 +12,7 @@ var (
 	removeContainers = false
 	cleanUpCmd       = &cobra.Command{
 		Use:   "cleanup",
-		Short: "Clean up OTel dependencies",
+		Short: "Clean up OpenTelemetry dependencies",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if err := cleanUp(); err != nil {
 				return err
@@ -47,7 +47,7 @@ func cleanUp() error {
 		return err
 	}
 
-	fmt.Println("Stopping Spin OTel Docker containers...")
+	fmt.Println("Stopping Spin OpenTelemetry Docker containers...")
 	getContainers := exec.Command("docker", "ps", fmt.Sprintf("--filter=name=%s*", otelConfigDirName), "--format=table")
 	dockerPsOutput, err := getContainers.CombinedOutput()
 	if err != nil {
@@ -74,6 +74,6 @@ func cleanUp() error {
 		return err
 	}
 
-	fmt.Println("All Spin OTel resources have been cleaned up.")
+	fmt.Println("All Spin OpenTelemetry resources have been cleaned up.")
 	return nil
 }

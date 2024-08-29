@@ -10,8 +10,8 @@ import (
 
 var upCmd = &cobra.Command{
 	Use:   "up",
-	Short: "Runs a Spin App with the default OTel environment variables.",
-	Long:  "Runs a Spin App with the default OTel environment variables. Any flags that work with the \"spin up\" command, will work with the \"spin otel up\" command: \"spin otel up -- --help\"",
+	Short: "Runs a Spin App with the default OpenTelemetry environment variables.",
+	Long:  "Runs a Spin App with the default OpenTelemetry environment variables. Any flags that work with the \"spin up\" command, will work with the \"spin otel up\" command: \"spin otel up -- --help\"",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if err := up(args); err != nil {
 			return err
@@ -28,7 +28,7 @@ func up(args []string) error {
 
 	pathToSpin := os.Getenv("SPIN_BIN_PATH")
 	if pathToSpin == "" {
-		return fmt.Errorf("Please ensure that you are running \"spin otel up\", rather than calling the OTel plugin binary directly")
+		return fmt.Errorf("Please ensure that you are running \"spin otel up\", rather than calling the OpenTelemetry plugin binary directly")
 	}
 
 	// Passing flags and args after the '--'
