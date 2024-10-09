@@ -8,15 +8,22 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var cleanUpCmd = &cobra.Command{
-	Use:   "cleanup",
-	Short: "Clean up OTel dependencies",
-	RunE: func(cmd *cobra.Command, args []string) error {
-		if err := cleanUp(); err != nil {
-			return err
-		}
-		return nil
-	},
+var (
+	removeContainers = false
+	cleanUpCmd       = &cobra.Command{
+		Use:   "cleanup",
+		Short: "Clean up OTel dependencies",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			if err := cleanUp(); err != nil {
+				return err
+			}
+			return nil
+		},
+	}
+)
+
+func init() {
+	cleanUpCmd.Flags().BoolVarP(&removeContainers, "remove", "r", false, "If specified, OTel containers will be removed")
 }
 
 func getIDs(dockerOutput []byte) []string {
@@ -53,13 +60,20 @@ func cleanUp() error {
 	containerIDs := getIDs(dockerPsOutput)
 
 	// The `docker stop` command will throw an error if there are no containers to stop
-	if len(containerIDs) != 0 {
-		stopContainers := exec.Command("docker", append([]string{"stop"}, containerIDs...)...)
-		stopContainersOutput, err := stopContainers.CombinedOutput()
-		if err != nil {
-			fmt.Println(string(stopContainersOutput))
-			return err
-		}
+	if len(containerIDs) == 0 {
+		fmt.Println("No Spin OTel resources found. Nothing to clean up.")
+		return nil
+	}
+
+	cleanupArgs := []string{"stop"}
+	if removeContainers {
+		cleanupArgs = []string{"rm", "-f"}
+	}
+	stopContainers := exec.Command("docker", append(cleanupArgs, containerIDs...)...)
+	stopContainersOutput, err := stopContainers.CombinedOutput()
+	if err != nil {
+		fmt.Println(string(stopContainersOutput))
+		return err
 	}
 
 	fmt.Println("All Spin OTel resources have been cleaned up.")
