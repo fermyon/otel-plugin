@@ -37,6 +37,7 @@ func up(args []string) error {
 	cmd.Env = append(
 		os.Environ(),
 		"OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4318",
+		"OTEL_EXPORTER_OTLP_HEADERS=x-otlp-api-key=SpinOTelApiKey",
 	)
 
 	cmd.Stdout = os.Stdout
