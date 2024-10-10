@@ -6,5 +6,5 @@ import (
 
 var openCmd = &cobra.Command{
 	Use:   "open",
-	Short: "Opens the desired OTel UI in the default browser.",
+	Short: "Opens the desired OpenTelemetry UI in the default browser.",
 }

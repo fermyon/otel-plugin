@@ -14,7 +14,7 @@ var (
 	aspire   = false
 	setUpCmd = &cobra.Command{
 		Use:   "setup",
-		Short: "Run OTel dependencies in Docker.",
+		Short: "Run OpenTelemetry dependencies in Docker.",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			s := stack.GetStackByFlags(aspire)
 			if err := setUp(s); err != nil {
@@ -41,7 +41,7 @@ func setUp(s stack.Stack) error {
 
 	cmd := exec.Command("docker", "compose", "-f", composeFilePath, "up", "-d")
 
-	fmt.Println("Pulling and running Spin OTel resources...")
+	fmt.Println("Pulling and running Spin OpenTelemetry resources...")
 
 	output, err := cmd.CombinedOutput()
 	if err != nil {
@@ -49,6 +49,6 @@ func setUp(s stack.Stack) error {
 		return err
 	}
 
-	fmt.Println("The Spin OTel resources are now running. Be sure to run the \"spin otel cleanup\" command when you are finished using them.")
+	fmt.Println("The Spin OpenTelemetry resources are now running. Be sure to run the \"spin otel cleanup\" command when you are finished using them.")
 	return nil
 }
