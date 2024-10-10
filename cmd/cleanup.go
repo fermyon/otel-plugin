@@ -30,13 +30,12 @@ func getIDs(dockerOutput []byte) []string {
 	var result []string
 	outputArray := strings.Split(string(dockerOutput), "\n")
 
-	for _, entry := range outputArray {
-		// Each container in the Docker Compose stack will have the name of the directory
-		if strings.Contains(entry, otelConfigDirName) {
-			fields := strings.Fields(entry)
-			if len(fields) > 0 {
-				result = append(result, fields[0])
-			}
+	// skip the first line of the output, because it is the table header row
+	// docker ps does not support hiding column headers
+	for _, entry := range outputArray[1:] {
+		fields := strings.Fields(entry)
+		if len(fields) > 0 {
+			result = append(result, fields[0])
 		}
 	}
 
@@ -49,8 +48,7 @@ func cleanUp() error {
 	}
 
 	fmt.Println("Stopping Spin OTel Docker containers...")
-
-	getContainers := exec.Command("docker", "ps")
+	getContainers := exec.Command("docker", "ps", fmt.Sprintf("--filter=name=%s*", otelConfigDirName), "--format=table")
 	dockerPsOutput, err := getContainers.CombinedOutput()
 	if err != nil {
 		fmt.Println(string(dockerPsOutput))
