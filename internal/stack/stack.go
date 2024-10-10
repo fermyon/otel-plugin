@@ -1,4 +1,4 @@
-package cmd
+package stack
 
 // To add support for an additional observability stack, do the following:
 // 1. Add a const with the name of the stack

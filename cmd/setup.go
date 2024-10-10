@@ -6,6 +6,7 @@ import (
 	"os/exec"
 	"path"
 
+	"github.com/fermyon/otel-plugin/internal/stack"
 	"github.com/spf13/cobra"
 )
 
@@ -15,7 +16,7 @@ var (
 		Use:   "setup",
 		Short: "Run OTel dependencies in Docker.",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			s := GetStackByFlags(aspire)
+			s := stack.GetStackByFlags(aspire)
 			if err := setUp(s); err != nil {
 				return err
 			}
@@ -28,7 +29,7 @@ func init() {
 	setUpCmd.PersistentFlags().BoolVarP(&aspire, "aspire", "", false, "Use .NET Aspire dashboard as OTel stack")
 }
 
-func setUp(s Stack) error {
+func setUp(s stack.Stack) error {
 	if err := checkDocker(); err != nil {
 		return err
 	}
