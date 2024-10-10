@@ -61,7 +61,7 @@ func cleanUp() error {
 
 	// The `docker stop` command will throw an error if there are no containers to stop
 	if len(containerIDs) == 0 {
-		fmt.Println("No Spin OTel resources found. Nothing to clean up.")
+		fmt.Println("No Spin OpenTelemetry resources found. Nothing to clean up.")
 		return nil
 	}
 
