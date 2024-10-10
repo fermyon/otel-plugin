@@ -32,13 +32,13 @@ func setUp(s Stack) error {
 	if err := checkDocker(); err != nil {
 		return err
 	}
-	fn := s.GetComposeFileName()
-	composeFile := path.Join(otelConfigPath, fn)
-	if _, err := os.Stat(composeFile); os.IsNotExist(err) {
-		return fmt.Errorf("The \"otel-config\" directory is missing the \"%s\" file, so please consider removing and re-installing the otel plugin", fn)
+	composeFileName := s.GetComposeFileName()
+	composeFilePath := path.Join(otelConfigPath, composeFileName)
+	if _, err := os.Stat(composeFilePath); os.IsNotExist(err) {
+		return fmt.Errorf("The \"otel-config\" directory is missing the \"%s\" file, so please consider removing and re-installing the otel plugin", composeFileName)
 	}
 
-	cmd := exec.Command("docker", "compose", "-f", composeFile, "up", "-d")
+	cmd := exec.Command("docker", "compose", "-f", composeFilePath, "up", "-d")
 
 	fmt.Println("Pulling and running Spin OTel resources...")
 
