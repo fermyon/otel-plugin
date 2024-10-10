@@ -6,31 +6,40 @@ import (
 	"os/exec"
 	"path"
 
+	"github.com/fermyon/otel-plugin/internal/stack"
 	"github.com/spf13/cobra"
 )
 
-var setUpCmd = &cobra.Command{
-	Use:   "setup",
-	Short: "Run OTel dependencies in Docker.",
-	RunE: func(cmd *cobra.Command, args []string) error {
-		if err := setUp(); err != nil {
-			return err
-		}
-		return nil
-	},
+var (
+	aspire   = false
+	setUpCmd = &cobra.Command{
+		Use:   "setup",
+		Short: "Run OTel dependencies in Docker.",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			s := stack.GetStackByFlags(aspire)
+			if err := setUp(s); err != nil {
+				return err
+			}
+			return nil
+		},
+	}
+)
+
+func init() {
+	setUpCmd.PersistentFlags().BoolVarP(&aspire, "aspire", "", false, "Use .NET Aspire dashboard as OTel stack")
 }
 
-func setUp() error {
+func setUp(s stack.Stack) error {
 	if err := checkDocker(); err != nil {
 		return err
 	}
-
-	composeFile := path.Join(otelConfigPath, "compose.yaml")
-	if _, err := os.Stat(composeFile); os.IsNotExist(err) {
-		return fmt.Errorf("The \"otel-config\" directory is missing the \"compose.yaml\" file, so please consider removing and re-installing the otel plugin")
+	composeFileName := s.GetComposeFileName()
+	composeFilePath := path.Join(otelConfigPath, composeFileName)
+	if _, err := os.Stat(composeFilePath); os.IsNotExist(err) {
+		return fmt.Errorf("The \"otel-config\" directory is missing the \"%s\" file, so please consider removing and re-installing the otel plugin", composeFileName)
 	}
 
-	cmd := exec.Command("docker", "compose", "-f", composeFile, "up", "-d")
+	cmd := exec.Command("docker", "compose", "-f", composeFilePath, "up", "-d")
 
 	fmt.Println("Pulling and running Spin OTel resources...")
 

@@ -1,0 +1,15 @@
+version: "3"
+services:
+  aspire-dashboard:
+    image: mcr.microsoft.com/dotnet/aspire-dashboard:8.1.0
+    restart: always
+    environment:
+      - ASPIRE_ALLOW_UNSECURED_TRANSPORT=true
+      - DASHBOARD__FRONTEND__AUTHMODE=Unsecured
+      - DASHBOARD__OTLP__AUTHMODE=ApiKey
+      - DASHBOARD__OTLP__PRIMARYAPIKEY=SpinOTelApiKey
+      - DASHBOARD__OTLP__CORS=http://localhost:3000
+    ports:
+      - "18888:18888" # .NET Aspire Dashboard UI endpoint
+      - "4317:18889" # OTLP gRPC endpoint
+      - "4318:18890" # OTLP HTTP endpoint

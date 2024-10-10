@@ -69,4 +69,5 @@ func init() {
 	openCmd.AddCommand(open.GrafanaCmd)
 	openCmd.AddCommand(open.JaegerCmd)
 	openCmd.AddCommand(open.PrometheusCmd)
+	openCmd.AddCommand(open.AspireCmd)
 }
