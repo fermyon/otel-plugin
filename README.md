@@ -14,11 +14,11 @@ This plugin relies on third-party software to work properly. Please be sure you 
 
 # Installation
 
-The trigger is installed as a Spin plugin. It can be installed from a release or build.
+You can install the `otel` plugin either using a stable release or from the `main` branch.
 
-## Install the latest version of the plugin
+## Install the latest version of the otel plugin
 
-The latest stable release of the command trigger plugin can be installed like so:
+The latest stable release of the `otel` plugin can be installed as shown here:
 
 ```sh
 spin plugins update
@@ -27,7 +27,7 @@ spin plugin install otel
 
 ## Install the canary version of the plugin
 
-The canary release of the command trigger plugin represents the most recent commits on `main` and may not be stable, with some features still in progress.
+The canary release of the `otel` plugin represents the most recent commit on `main` (`HEAD`) and may not be stable, with some features still in progress.
 
 ```sh
 spin plugins install --url https://github.com/fermyon/otel-plugin/releases/download/canary/otel.json
@@ -43,15 +43,33 @@ go build -o otel
 spin pluginify --install
 ```
 
+# Observability Stacks
+
+The `otel` plugin currently supports two different observability stacks:
+
+- Default: Multi-container observability stack based on Prometheus, Loki, Grafana and Jaeger
+- Aspire: Single-container observability stack using .NET Aspire Dashboard
+  
 # Usage
 
 Once the plugin is installed, you can try the below commands:
 
-## Set up the dashboards
+## Set up the observability stack
+
+You chose the desired observability stack as part of the `setup` command. You can change the observability stack at any point in time by cleaning it up and re-running the `setup` command using another stack.
+
+### Set up the default observability stack
 
 ```sh
 spin otel setup
 ```
+
+### Set up the aspire observability stack
+
+```sh
+spin otel setup --aspire
+```
+
 
 ## Run a Spin app that exports telemetry data
 
@@ -66,6 +84,8 @@ spin otel up -- --help
 ```
 
 ## Open the dashboards in the default browser
+
+Depending on the chosen observability stack, you can use the sub-commands of `spin otel open` to open corresponding dashboards using your default browser.
 
 Dashboard for viewing metrics and logs:
 
@@ -83,6 +103,12 @@ Dashboard for querying and viewing metrics:
 
 ```sh
 spin otel open prometheus
+```
+
+.NET Aspire Dashboard (all-in-one).
+
+```sh
+spin otel open aspire
 ```
 
 ## Terminate the dashboards
