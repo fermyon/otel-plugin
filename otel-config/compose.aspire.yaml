@@ -1,7 +1,7 @@
 version: "3"
 services:
   aspire-dashboard:
-    image: mcr.microsoft.com/dotnet/aspire-dashboard:8.1.0
+    image: mcr.microsoft.com/dotnet/aspire-dashboard:9.2.0
     restart: always
     environment:
       - ASPIRE_ALLOW_UNSECURED_TRANSPORT=true
