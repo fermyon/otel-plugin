@@ -1,7 +1,7 @@
 version: "3"
 services:
   otel-collector:
-    image: otel/opentelemetry-collector-contrib:0.127.0
+    image: otel/opentelemetry-collector-contrib:0.140.0
     restart: always
     command:
       - "--config=/etc/otel-collector-config.yaml"
@@ -19,14 +19,14 @@ services:
       - loki
 
   jaeger:
-    image: jaegertracing/all-in-one:latest
+    image: jaegertracing/all-in-one:1.75.0
     restart: always
     ports:
       - "16686:16686" # UI
       - "14268" # can accept spans directly from clients in jaeger.thrift format over binary thrift protocol
 
   tempo:
-    image: grafana/tempo:2.7.2
+    image: grafana/tempo:2.9.0
     command:
       - "-config.file=/etc/tempo/config.yaml"
     volumes:
@@ -36,7 +36,7 @@ services:
       - 7999:7999
 
   prometheus:
-    image: prom/prometheus:latest
+    image: prom/prometheus:v3.7.3
     restart: always
     command:
       - "--config.file=/etc/prometheus/prometheus.yaml"
@@ -47,7 +47,7 @@ services:
       - "9090:9090"
 
   grafana:
-    image: grafana/grafana:12.0.1
+    image: grafana/grafana:12.1
     ports:
       - 5050:3000
     volumes:
@@ -61,7 +61,7 @@ services:
       - tempo
 
   loki:
-    image: grafana/loki:3.5.1
+    image: grafana/loki:3.5.8
     command:
       - "-config.file=/etc/loki/config.yaml"
     volumes:
