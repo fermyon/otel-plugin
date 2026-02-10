@@ -10,7 +10,7 @@ Spin applications have the ability to export metrics and trace data. This plugin
 
 This plugin relies on third-party software to work properly. Please be sure you have the following installed before continuing:
 
-- Latest version of [Docker](https://www.docker.com/products/docker-desktop)
+- Latest version of [Docker](https://www.docker.com/products/docker-desktop) or [Podman](https://podman.io/docs)
 
 # Installation
 
@@ -49,7 +49,7 @@ The `otel` plugin currently supports two different observability stacks:
 
 - Default: Multi-container observability stack based on Prometheus, Loki, Grafana and Jaeger
 - Aspire: Single-container observability stack using .NET Aspire Dashboard
-  
+
 # Usage
 
 Once the plugin is installed, you can try the below commands:

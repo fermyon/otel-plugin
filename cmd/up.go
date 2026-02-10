@@ -22,10 +22,6 @@ var upCmd = &cobra.Command{
 }
 
 func up(args []string) error {
-	if err := checkDocker(); err != nil {
-		return err
-	}
-
 	pathToSpin := os.Getenv("SPIN_BIN_PATH")
 	if pathToSpin == "" {
 		return fmt.Errorf("Please ensure that you are running \"spin otel up\", rather than calling the OpenTelemetry plugin binary directly")

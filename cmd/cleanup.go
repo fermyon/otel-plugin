@@ -26,12 +26,12 @@ func init() {
 	cleanUpCmd.Flags().BoolVarP(&removeContainers, "remove", "r", false, "If specified, OTel containers will be removed")
 }
 
-func getIDs(dockerOutput []byte) []string {
+func getIDs(runtimeOutput []byte) []string {
 	var result []string
-	outputArray := strings.Split(string(dockerOutput), "\n")
+	outputArray := strings.Split(string(runtimeOutput), "\n")
 
 	// skip the first line of the output, because it is the table header row
-	// docker ps does not support hiding column headers
+	// {{runtime}} ps does not support hiding column headers
 	for _, entry := range outputArray[1:] {
 		fields := strings.Fields(entry)
 		if len(fields) > 0 {
@@ -43,21 +43,22 @@ func getIDs(dockerOutput []byte) []string {
 }
 
 func cleanUp() error {
-	if err := checkDocker(); err != nil {
-		return err
-	}
-
-	fmt.Println("Stopping Spin OpenTelemetry Docker containers...")
-	getContainers := exec.Command("docker", "ps", fmt.Sprintf("--filter=name=%s*", otelConfigDirName), "--format=table")
-	dockerPsOutput, err := getContainers.CombinedOutput()
+	runtime, err := detectContainerRuntime()
 	if err != nil {
-		fmt.Println(string(dockerPsOutput))
 		return err
 	}
 
-	containerIDs := getIDs(dockerPsOutput)
+	fmt.Println("Stopping Spin OpenTelemetry containers...")
+	getContainers := exec.Command(runtime, "ps", fmt.Sprintf("--filter=name=%s*", otelConfigDirName))
+	processOutput, err := getContainers.CombinedOutput()
+	if err != nil {
+		fmt.Println(string(processOutput))
+		return err
+	}
 
-	// The `docker stop` command will throw an error if there are no containers to stop
+	containerIDs := getIDs(processOutput)
+
+	// The `{{runtime}} stop` command will throw an error if there are no containers to stop
 	if len(containerIDs) == 0 {
 		fmt.Println("No Spin OpenTelemetry resources found. Nothing to clean up.")
 		return nil
@@ -67,7 +68,7 @@ func cleanUp() error {
 	if removeContainers {
 		cleanupArgs = []string{"rm", "-f"}
 	}
-	stopContainers := exec.Command("docker", append(cleanupArgs, containerIDs...)...)
+	stopContainers := exec.Command(runtime, append(cleanupArgs, containerIDs...)...)
 	stopContainersOutput, err := stopContainers.CombinedOutput()
 	if err != nil {
 		fmt.Println(string(stopContainersOutput))
