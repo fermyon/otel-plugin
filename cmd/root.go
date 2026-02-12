@@ -7,6 +7,7 @@ import (
 	"path"
 	"strings"
 
+	"github.com/Masterminds/semver"
 	open "github.com/fermyon/otel-plugin/cmd/open"
 	"github.com/spf13/cobra"
 )
@@ -81,6 +82,40 @@ func detectContainerRuntime() (string, error) {
 	}
 
 	return runtime, nil
+}
+
+func getSpinVersion() (*semver.Version, error) {
+	spin, err := getSpinPath()
+	if err != nil {
+		return nil, err
+	}
+
+	cmd := exec.Command(spin, "--version")
+	output, err := cmd.CombinedOutput()
+	if err != nil {
+		return nil, err
+	}
+
+	outputParts := strings.Split(string(output), " ")
+	if len(outputParts) < 2 {
+		return nil, fmt.Errorf("Spin appears to have changed how it formats its version flag output. Expected \"spin {{VERSION}}\", got %s", string(output))
+	}
+
+	semver, err := semver.NewVersion(outputParts[1])
+	if err != nil {
+		return nil, fmt.Errorf("Spin version is not valid semver: %v", err)
+	}
+
+	return semver, nil
+}
+
+func getSpinPath() (string, error) {
+	pathToSpin := os.Getenv("SPIN_BIN_PATH")
+	if pathToSpin == "" {
+		return "", fmt.Errorf("Please ensure that you are running \"spin otel up\", rather than calling the OpenTelemetry plugin binary directly")
+	}
+
+	return pathToSpin, nil
 }
 
 func Execute() {
