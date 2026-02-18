@@ -5,6 +5,7 @@ import (
 	"os"
 	"os/exec"
 	"path"
+	"strings"
 
 	open "github.com/fermyon/otel-plugin/cmd/open"
 	"github.com/spf13/cobra"
@@ -35,19 +36,51 @@ func setOtelConfigPath() error {
 	return nil
 }
 
-// checkDocker checks whether Docker is installed and the Docker daemon is running
-func checkDocker() error {
-	cmd := exec.Command("docker", "--version")
-	if err := cmd.Run(); err != nil {
-		return fmt.Errorf("Docker appears not to be installed, so please visit their install page and try again once installed: https://www.docker.com/products/docker-desktop")
+// detectContainerRuntime checks for a supported container runtime.
+//
+// Returns the detected runtime name.
+func detectContainerRuntime() (string, error) {
+	// Default Docker, fallback Podman
+	runtimesToCheck := []string{"docker", "podman"}
+	runtime := ""
+	for _, rt := range runtimesToCheck {
+		cmd := exec.Command(rt, "--version")
+		if err := cmd.Run(); err != nil {
+			continue
+		}
+		runtime = rt
+		break
 	}
 
-	cmd = exec.Command("docker", "info")
-	if err := cmd.Run(); err != nil {
-		return fmt.Errorf("The Docker daemon appears not to be running. The command to start Docker depends on your operating system. For instructions, check the correct page under https://docs.docker.com/engine/install")
+	if runtime == "" {
+		return "", fmt.Errorf("Unable to detect container runtime.\nPlease ensure at least one of the following is installed and in the PATH: %s\n", strings.Join(runtimesToCheck, ", "))
 	}
 
-	return nil
+	if runtime == "podman" {
+		// Podman doesn't auto-install a compose provider
+		composeProvidersToCheck := []string{"podman-compose", "docker-compose"}
+		composeProvider := ""
+		for _, rt := range composeProvidersToCheck {
+			cmd := exec.Command(rt, "--version")
+			if err := cmd.Run(); err != nil {
+				continue
+			}
+
+			composeProvider = rt
+			break
+		}
+
+		if composeProvider == "" {
+			return "", fmt.Errorf("Unable to detect compose provider.\n Please ensure at least one of the following is installed and in the PATH: %s\n", strings.Join(composeProvidersToCheck, ", "))
+		}
+	}
+
+	cmd := exec.Command(runtime, "info")
+	if err := cmd.Run(); err != nil {
+		return "", fmt.Errorf("The daemon/virtual machine for %[1]s appears not to be running. Please check the documentation for %[1]s for more information.", runtime)
+	}
+
+	return runtime, nil
 }
 
 func Execute() {

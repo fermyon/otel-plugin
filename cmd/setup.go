@@ -14,7 +14,8 @@ var (
 	aspire   = false
 	setUpCmd = &cobra.Command{
 		Use:   "setup",
-		Short: "Run OpenTelemetry dependencies in Docker.",
+		Short: "Run OpenTelemetry dependencies as containers",
+		Long:  "Required OpenTelemetry dependencies will be started as containers using a supported container runtime (docker, podman)",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			s := stack.GetStackByFlags(aspire)
 			if err := setUp(s); err != nil {
@@ -30,16 +31,18 @@ func init() {
 }
 
 func setUp(s stack.Stack) error {
-	if err := checkDocker(); err != nil {
+	runtime, err := detectContainerRuntime()
+	if err != nil {
 		return err
 	}
+
 	composeFileName := s.GetComposeFileName()
 	composeFilePath := path.Join(otelConfigPath, composeFileName)
 	if _, err := os.Stat(composeFilePath); os.IsNotExist(err) {
 		return fmt.Errorf("The \"otel-config\" directory is missing the \"%s\" file, so please consider removing and re-installing the otel plugin", composeFileName)
 	}
 
-	cmd := exec.Command("docker", "compose", "-f", composeFilePath, "up", "-d")
+	cmd := exec.Command(runtime, "compose", "-f", composeFilePath, "up", "-d")
 
 	fmt.Println("Pulling and running Spin OpenTelemetry resources...")
 
