@@ -3,8 +3,8 @@ package cmd
 import (
 	"os"
 	"os/exec"
+	"strconv"
 
-	"github.com/Masterminds/semver"
 	"github.com/spf13/cobra"
 )
 
@@ -55,14 +55,25 @@ func up(args []string) error {
 }
 
 func spinHasWasiOtel() bool {
-	spinVersion, err := getSpinVersion()
+	major, err := strconv.Atoi(os.Getenv("SPIN_VERSION_MAJOR"))
 	if err != nil {
-		// This means something is wrong with Spin
-		panic(err)
+		panic("Something went wrong parsing the SPIN_VERSION_MAJOR env var: " + err.Error())
 	}
 
-	// The "-0" suffix enables the use of a pre-release >= 3.6.0
-	constraints, err := semver.NewConstraint(">= 3.6.0-0")
-	spinVersionHasWasiOtel, _ := constraints.Validate(spinVersion)
-	return spinVersionHasWasiOtel
+	minor, err := strconv.Atoi(os.Getenv("SPIN_VERSION_MINOR"))
+	if err != nil {
+		panic("Something went wrong parsing the SPIN_VERSION_MINOR env var: " + err.Error())
+	}
+
+	if major < 3 {
+		return false
+	} else if major > 3 {
+		return true
+	} else { // if major == 3
+		if minor >= 6 {
+			return true
+		} else {
+			return false
+		}
+	}
 }
