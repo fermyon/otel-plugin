@@ -4,7 +4,7 @@ This is a plugin that makes it easy to use OTel with Spin.
 
 ## Background
 
-Spin applications have the ability to export metrics and trace data. This plugin provides dashboards for viewing the data.
+Spin applications have the ability to export metrics, logs, and trace data. This plugin provides dashboards for viewing the data.
 
 ## Requirements
 
@@ -71,7 +71,7 @@ spin otel setup --aspire
 ```
 
 
-## Run a Spin app that exports telemetry data
+## Run a Spin app and exports telemetry data
 
 ```sh
 spin otel up
@@ -82,6 +82,8 @@ Any flags that work with the `spin up` command, will work with the `spin otel up
 ```sh
 spin otel up -- --help
 ```
+
+Additionally, the `spin otel up` command enables the `wasi-otel` features in versions of Spin >= v3.6.0, which means that users will be able to instrument their applications with OpenTelemetry using the [opentelemetry-wasi](github.com/bytecodealliance/opentelemetry-wasi) SDKs.
 
 ## Open the dashboards in the default browser
 

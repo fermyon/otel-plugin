@@ -83,6 +83,15 @@ func detectContainerRuntime() (string, error) {
 	return runtime, nil
 }
 
+func getSpinPath() (string, error) {
+	pathToSpin := os.Getenv("SPIN_BIN_PATH")
+	if pathToSpin == "" {
+		return "", fmt.Errorf("Please ensure that you are running \"spin otel up\", rather than calling the OpenTelemetry plugin binary directly")
+	}
+
+	return pathToSpin, nil
+}
+
 func Execute() {
 	if err := setOtelConfigPath(); err != nil {
 		fmt.Fprintln(os.Stderr, fmt.Errorf("Error finding the \"otel-config\" directory: %w", err))

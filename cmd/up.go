@@ -1,17 +1,23 @@
 package cmd
 
 import (
-	"fmt"
 	"os"
 	"os/exec"
+	"strconv"
 
 	"github.com/spf13/cobra"
 )
 
+var experimentalWasiOtel = false
+
+func init() {
+	upCmd.Flags().BoolVarP(&experimentalWasiOtel, "experimental-wasi-otel", "", false, "Enable the experimental wasi-otel feature in Spin")
+}
+
 var upCmd = &cobra.Command{
 	Use:   "up",
-	Short: "Runs a Spin App with the default OpenTelemetry environment variables.",
-	Long:  "Runs a Spin App with the default OpenTelemetry environment variables. Any flags that work with the \"spin up\" command, will work with the \"spin otel up\" command: \"spin otel up -- --help\"",
+	Short: "Runs a Spin App with the default OpenTelemetry environment variables and wasi-otel features enabled.",
+	Long:  "Runs a Spin App with the default OpenTelemetry environment variables and wasi-otel features enabled. Any flags that work with the \"spin up\" command, will work with the \"spin otel up\" command: \"spin otel up -- --help\"",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if err := up(args); err != nil {
 			return err
@@ -22,13 +28,19 @@ var upCmd = &cobra.Command{
 }
 
 func up(args []string) error {
-	pathToSpin := os.Getenv("SPIN_BIN_PATH")
-	if pathToSpin == "" {
-		return fmt.Errorf("Please ensure that you are running \"spin otel up\", rather than calling the OpenTelemetry plugin binary directly")
+	pathToSpin, err := getSpinPath()
+	if err != nil {
+		return err
+	}
+
+	cmdArgs := []string{"up"}
+
+	if spinHasWasiOtel() {
+		cmdArgs = append(cmdArgs, "--experimental-wasi-otel")
 	}
 
 	// Passing flags and args after the '--'
-	cmdArgs := append([]string{"up"}, args...)
+	cmdArgs = append(cmdArgs, args...)
 	cmd := exec.Command(pathToSpin, cmdArgs...)
 	cmd.Env = append(
 		os.Environ(),
@@ -40,4 +52,28 @@ func up(args []string) error {
 	cmd.Stderr = os.Stderr
 
 	return cmd.Run()
+}
+
+func spinHasWasiOtel() bool {
+	major, err := strconv.Atoi(os.Getenv("SPIN_VERSION_MAJOR"))
+	if err != nil {
+		panic("Something went wrong parsing the SPIN_VERSION_MAJOR env var: " + err.Error())
+	}
+
+	minor, err := strconv.Atoi(os.Getenv("SPIN_VERSION_MINOR"))
+	if err != nil {
+		panic("Something went wrong parsing the SPIN_VERSION_MINOR env var: " + err.Error())
+	}
+
+	if major < 3 {
+		return false
+	} else if major > 3 {
+		return true
+	} else { // if major == 3
+		if minor >= 6 {
+			return true
+		} else {
+			return false
+		}
+	}
 }
