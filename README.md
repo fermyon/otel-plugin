@@ -83,7 +83,7 @@ Any flags that work with the `spin up` command, will work with the `spin otel up
 spin otel up -- --help
 ```
 
-Additionally, the `spin otel up` command enables the `wasi-otel` features in Spin, which means that users will be able to instrument their applications with OpenTelemetry using the [opentelemetry-wasi](github.com/bytecodealliance/opentelemetry-wasi) SDKs.
+Additionally, the `spin otel up` command enables the `wasi-otel` features in versions of Spin >= v3.6.0, which means that users will be able to instrument their applications with OpenTelemetry using the [opentelemetry-wasi](github.com/bytecodealliance/opentelemetry-wasi) SDKs.
 
 ## Open the dashboards in the default browser
 
