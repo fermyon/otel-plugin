@@ -30,7 +30,7 @@ spin plugin install otel
 The canary release of the `otel` plugin represents the most recent commit on `main` (`HEAD`) and may not be stable, with some features still in progress.
 
 ```sh
-spin plugins install --url https://github.com/fermyon/otel-plugin/releases/download/canary/otel.json
+spin plugins install --url https://github.com/spinframework/otel-plugin/releases/download/canary/otel.json
 ```
 
 ## Install from a local build
